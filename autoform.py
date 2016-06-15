@@ -29,7 +29,7 @@ class SqlaFormMeta(FormMeta):
         return super(SqlaFormMeta, cls).__new__(cls, name, bases, attrs)
 
 
-class SqlaForm(with_metaclass(SqlaFormMeta, object)):
+class SqlaForm(with_metaclass(SqlaFormMeta, Form)):
     pass
 
 
@@ -47,6 +47,6 @@ class User(Base):
         return '<User: {}>'.format(self.name)
 
 
-class UserForm(SqlaForm, Form):
+class UserForm(SqlaForm):
     class ModelMeta:
         model = User
