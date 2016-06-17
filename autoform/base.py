@@ -23,7 +23,6 @@ def get_model_by_tablename(origin, table):
             return model
     raise ValueError('No model exists for table %s' % table)
 
-
 def get_related_model(origin, fk):
     """fk has the form <tablename>.<column>, assume <column>=id"""
     fk_table, fk_col = fk.split('.')
@@ -38,6 +37,7 @@ def is_foreign_key(col):
 
 
 class SqlaFormMeta(FormMeta):
+    """Extends wtf's FormMeta and generates fields from sql model columns."""
 
     def __new__(cls, name, bases, attrs):
         if 'ModelMeta' not in attrs:
@@ -64,24 +64,4 @@ class SqlaFormMeta(FormMeta):
             attrs.update({field_name: field})
 
         return super(SqlaFormMeta, cls).__new__(cls, name, bases, attrs)
-
-
-# Example:
-
-# Base = declarative_base()
-# class User(Base):
-    # __tablename__ = 'users'
-
-    # id = Column(Integer, primary_key=True, autoincrement=True)
-    # username = Column(String(64))
-    # password = Column(String(64))
-
-    # def __repr__(self):
-        # return '<User: {}>'.format(self.name)
-
-
-# class UserForm(SqlaForm):
-    # class ModelMeta:
-        # model = User
-        # session = session  # has to be created beforehand
 

@@ -1,1 +1,8 @@
+*.pyc
+.env
+docs/_build
+*.swp
+*.db
+
+# temporary
 testapp/
