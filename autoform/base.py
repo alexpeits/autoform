@@ -23,11 +23,13 @@ def get_model_by_tablename(origin, table):
             return model
     raise ValueError('No model exists for table %s' % table)
 
+
 def get_related_model(origin, fk):
-    """fk has the form <tablename>.<column>, assume <column>=id"""
+    """fk has the form <tablename>.<column>, assume <column>=id."""
     fk_table, fk_col = fk.split('.')
     fk_model = get_model_by_tablename(origin, fk_table)
     return fk_model
+
 
 def is_foreign_key(col):
     """Check if a column is a foreign key."""
@@ -64,4 +66,3 @@ class SqlaFormMeta(FormMeta):
             attrs.update({field_name: field})
 
         return super(SqlaFormMeta, cls).__new__(cls, name, bases, attrs)
-
