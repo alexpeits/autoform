@@ -1,16 +1,18 @@
 """Automatic wtf Form generation from SQLAlchemy models."""
 
 from wtforms.form import FormMeta
-from wtforms.fields import StringField, IntegerField, SelectField
+from wtforms.fields import SelectField
+from wtforms.fields import (StringField, IntegerField, FloatField,
+                            BooleanField)
 
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import String, Integer, Float, Boolean
 
 
 MAPPING = {
     String: StringField,
     Integer: IntegerField,
+    Float: FloatField,
+    Boolean: BooleanField,
 }
 
 
@@ -52,12 +54,14 @@ class SqlaFormMeta(FormMeta):
             if is_foreign_key(col_type):
                 fk = list(col_type.foreign_keys)[0].target_fullname
                 rel_model = get_related_model(model, fk)
-                choices = [(m.id, m.name) for m in session.query(rel_model).all()]
-                field_type = SelectField(field_name, choices=choices)
+                choices = [(m.id, m.name)
+                           for m in session.query(rel_model).all()]
+                field = SelectField(field_name, choices=choices)
             else:
-                field_type = MAPPING.get(col_type.type.__class__, None)(field_name)
+                field_type = MAPPING.get(col_type.type.__class__, None)
+                field = field_type(field_name)
             assert field_type is not None, 'Column type not recognized'
-            attrs.update({field_name: field_type})
+            attrs.update({field_name: field})
 
         return super(SqlaFormMeta, cls).__new__(cls, name, bases, attrs)
 
