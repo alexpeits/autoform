@@ -2,15 +2,12 @@
 Autoform
 ========
 
-
 --------------------------------------------------------
 Automatically generated wtf Forms from SQLAlchemy models
 --------------------------------------------------------
 
 
-~~~~~~
-Usage:
-~~~~~~
+**Usage:**
 
 .. code-block:: python
 
